@@ -28,6 +28,7 @@ default-resolver-crypto = [
     "use-blake2",
     "use-sha2",
     "use-curve25519",
+    "use-blake3",
 ]
 nightly = ["blake2/simd_opt", "subtle/nightly"]
 ring-resolver = ["ring", "std"]
@@ -48,6 +49,7 @@ std = [
     "blake2/std",
     "sha2/std",
     "byteorder/std",
+    "blake3/std"
 ]
 
 # Crypto primitives for default-resolver.
@@ -55,6 +57,7 @@ use-curve25519 = ["curve25519-dalek", "default-resolver"]
 use-chacha20poly1305 = ["chacha20poly1305", "default-resolver"]
 use-xchacha20poly1305 = ["chacha20poly1305", "default-resolver"]
 use-blake2 = ["blake2", "default-resolver"]
+use-blake3 = ["blake3", "default-resolver"]
 use-sha2 = ["sha2", "default-resolver"]
 use-aes-gcm = ["aes-gcm", "default-resolver"]
 use-pqcrypto-kyber1024 = [
@@ -85,6 +88,7 @@ aes-gcm = { version = "0.10", optional = true, default-features = false, feature
 ] }
 chacha20poly1305 = { version = "0.10", optional = true, default-features = false }
 blake2 = { version = "0.10", optional = true, default-features = false }
+blake3 = { version = "1.8.2", optional = true, features = ["rayon", "mmap"] }
 sha2 = { version = "0.10", optional = true, default-features = false }
 curve25519-dalek = { version = "4", optional = true, default-features = false }
 p256 = { version = "0.13.2", features = ["ecdh"], optional = true }

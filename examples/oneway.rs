@@ -1,3 +1,5 @@
+// Modified version with blake3 support.
+
 #![cfg_attr(
     not(any(feature = "default-resolver", feature = "ring-accelerated",)),
     allow(dead_code, unused_extern_crates, unused_imports)
@@ -19,7 +21,7 @@ use std::{
 
 static SECRET: &[u8; 32] = b"i don't care for fidget spinners";
 static PARAMS: LazyLock<NoiseParams> =
-    LazyLock::new(|| "Noise_Xpsk1_25519_ChaChaPoly_BLAKE2s".parse().unwrap());
+    LazyLock::new(|| "Noise_Xpsk1_25519_ChaChaPoly_BLAKE3".parse().unwrap());
 // The responder key is static in this example because the X pattern means
 // the initiator has pre-handshake knowledge of the responder's public key
 // (and of course both share the same psk `SECRET`)

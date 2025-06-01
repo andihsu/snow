@@ -1,5 +1,7 @@
 # Snow
 
+with extra blake3 support :)
+
 [![Crates.io](https://img.shields.io/crates/v/snow.svg)](https://crates.io/crates/snow)
 [![Docs.rs](https://docs.rs/snow/badge.svg)](https://docs.rs/snow)
 [![Build Status](https://github.com/mcginty/snow/workflows/Build/badge.svg)](https://github.com/mcginty/snow/actions)

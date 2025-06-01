@@ -8,6 +8,8 @@ use curve25519_dalek::montgomery::MontgomeryPoint;
 // Hashes
 #[cfg(feature = "use-blake2")]
 use blake2::{Blake2b, Blake2b512, Blake2s, Blake2s256, Digest as BlakeDigest};
+#[cfg(feature = "use-blake3")]
+use blake3::{Hasher, Hash as Blake3Hash};
 #[cfg(feature = "use-sha2")]
 #[allow(unused)]
 // `blake2` and `sha2` both try to export `digest::Digest`.
@@ -80,6 +82,8 @@ impl CryptoResolver for DefaultResolver {
             HashChoice::Blake2s => Some(Box::<HashBLAKE2s>::default()),
             #[cfg(feature = "use-blake2")]
             HashChoice::Blake2b => Some(Box::<HashBLAKE2b>::default()),
+            #[cfg(feature = "use-blake3")]
+            HashChoice::Blake3 => Some(Box::<HashBLAKE3>::default()),
             _ => None,
         }
     }
@@ -168,6 +172,12 @@ struct HashBLAKE2b {
 #[derive(Default)]
 struct HashBLAKE2s {
     hasher: Blake2s256,
+}
+
+#[cfg(feature = "use-blake3")]
+#[derive(Default)]
+struct HashBLAKE3 {
+    hasher: blake3::Hasher,
 }
 
 /// Wraps `kyber1024`'s implementation
@@ -561,6 +571,34 @@ impl Hash for HashBLAKE2s {
     fn result(&mut self, out: &mut [u8]) {
         let hash = self.hasher.finalize_reset();
         out[..32].copy_from_slice(&hash);
+    }
+}
+
+impl Hash for HashBLAKE3 {
+    fn name(&self) -> &'static str {
+        "BLAKE3"
+    }
+
+    fn block_len(&self) -> usize {
+        64
+    }
+
+    fn hash_len(&self) -> usize {
+        32
+    }
+
+    fn reset(&mut self) {
+        self.hasher.reset();
+    }
+
+    fn input(&mut self, data: &[u8]) {
+        self.hasher.update(data);
+    }
+
+    fn result(&mut self, out: &mut [u8]) {
+        let binding = self.hasher.finalize();
+        let hash = binding.as_bytes();
+        out[..32].copy_from_slice(&*hash);
     }
 }
 
